@@ -1,0 +1,100 @@
+<%= form_for @changeset, user_path(@conn, :create), fn form -> %>
+<%= if form.errors != [] do %>
+  <div class="alert alert-danger">
+    <p>Error!</p>
+    <ul>
+      <%= for {attr, message} <- form.errors do %>
+        <li><%= humanize(attr) %> <%= translate_error(message) %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<div class="row">
+  <div class="card light-blue lighten-5 col s12 m12 l112">
+    <div class="card-content">
+      <span class="card-title">新規登録</span>
+      <p>どなたでも無料でご自由にご登録いただけます。</p>
+      <div class="row" >
+
+        <div class="col s12 m12 l6" id="step1">
+          <div class="input-field">
+            <input class="validate" id="user_name" name="user[name]" type="text"  placeholder="ユーザID">
+            <label>ユーザーID</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12 m12 l6" id="step2">
+          <div class="input-field">
+            <input class="vaildate" id="user_password" name="user[password]" type="password"  placeholder="パスワード">
+            <label>パスワード</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-action" style="position:static">
+      <%= submit "登録", class: "btn btn-primary", id: "step3" %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="card light-blue lighten-5 col s12 m12 l12">
+    <div class="col s12 m12 l12" style="margin-top:10px;">
+      <div class="card z-depth-1">
+        <div class="card-content">
+          <span class="card-title">XEEシステムとは</span>
+          <p>
+            <a href="https://s3-ap-northeast-1.amazonaws.com/xee-manual/system/xee-manual-1-0-0.pdf" target="_blank" class="waves-effect waves-light btn"><i class="material-icons right">launch</i>教師用マニュアル</a><a href="https://docs.com/user642920/5154/xee" target="_blank" class="waves-effect waves-light btn" style="margin-left:20px;"><i class="material-icons right">launch</i>紹介スライド</a><a href="<%= page_path(@conn, :about) %>" class="waves-effect waves-light btn" style="margin-left:20px;">アバウトページ</a><br />Version 1.0.0 (2016/12/25)
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 m6 col s12 m12 l12" style="margin-top:10px;">
+      <div class="card z-depth-1">
+        <div class="card-content">
+          <span class="card-title">最新情報</span>
+          <p>
+<a class="twitter-timeline" data-lang="ja" data-theme="light" href="https://twitter.com/xeejp">XEE PROJECTの最新情報</a>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var intro = introJs().onchange(
+  function(){
+    switch(document.activeElement.id){
+      case "user_name":document.getElementById("user_password").focus();break;
+      case "user_password":document.getElementById("step3").focus();break;
+      default:document.activeElement.blur();break;
+    }
+  }
+  ).setOptions({
+    'showButtons': false,
+    'showBullets': false,
+    'showStepNumbers':false
+})
+
+const step = [
+  {
+    element: '#step1',
+    intro:"<p>ユーザーIDを入力してください。</p><br/><button type='button' class='btn grey black-text lighten-2 waves-effect' onClick='intro.exit()'>閉じる</button><button type='button' class='btn waves-effect waves-light' style='margin-left:10px' onClick='intro.nextStep()'>次へ</button>"
+  },
+  {
+    element: '#step2',
+    intro: "<p>パスワードを入力してください。<br/>パスワードは5文字以上である必要があります</p><br/><button type='button' class='btn grey black-text lighten-2 waves-effect' onClick='intro.exit()'>閉じる</button><button type='button' class='btn waves-effect waves-light' style='margin-left:10px' onClick='intro.nextStep()'>次へ</button>"
+  },
+  {
+    element: '#step3',
+    intro: "<p>こちらから新規登録をしてください。</p><br/><button type='button' class='btn grey black-text lighten-2 waves-effect' onClick='intro.exit()'>閉じる</button>",
+    position:'right'
+  }
+]
+intro = intro.setOption('steps',step)
+setTimeout(() => intro.start(), 60000)
+document.getElementById("user_name").focus()
+</script>
+<% end %>
